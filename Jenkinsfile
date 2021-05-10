@@ -67,7 +67,7 @@ pipeline {
         }
          stage('Test') {
             steps {
-                sh '.test/test.sh'
+                sh './test/test.js'
             }
          }
         stage('Approval for QA deployment') {
