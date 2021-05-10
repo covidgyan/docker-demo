@@ -65,6 +65,11 @@ pipeline {
                 sh 'docker run -d -p 3000:3000 myimagehub005/docker_node_demo:latest'
             }
         }
+         stage('Test') {
+            steps {
+                sh './jenkins/scripts/test.sh'
+            }
+         }
         stage('Approval for QA deployment') {
             steps {
                 echo "Taking approval from DEV Manager for QA Deployment"
@@ -74,11 +79,7 @@ pipeline {
             }
         }
     }
-       // stage('Test') {
-         //   steps {
-       //         sh './jenkins/scripts/test.sh'
-      //      }
-      //  }
+       
       //  stage('Deliver') {
        //     steps {
        //         sh './jenkins/scripts/deliver.sh'
