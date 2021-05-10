@@ -68,7 +68,7 @@ pipeline {
          stage('Test') {
             steps {
                 echo 'test in progress'
-                cmd './test/test.js'
+                sh 'node ./test/test.js'
             }
          }
         stage('Approval for QA deployment') {
