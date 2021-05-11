@@ -124,7 +124,7 @@ pipeline {
                 echo 'Successfully  pulled the image'                     
             }
         }
-        stage('Deployment in AKS ACC') {
+        stage('Deployment in AKS PROD') {
             steps {
                 echo 'Deployment in progress'   
                 echo 'Deployment Completed'       
