@@ -69,7 +69,7 @@ pipeline {
                  }
             }
         }
-        stage('Pull Docker image') {
+        stage('Pull Docker image for QA') {
             steps {
                 echo 'Successfully  pulled the image'                     
             }
@@ -94,7 +94,7 @@ pipeline {
                  }
             }
         }
-        stage('Pull Docker image') {
+        stage('Pull Docker image foe ACC') {
             steps {
                 echo 'Successfully  pulled the image'                     
             }
@@ -119,7 +119,7 @@ pipeline {
                  }
             }
         }
-        stage('Pull Docker image') {
+        stage('Pull Docker image for PROD') {
             steps {
                 echo 'Successfully  pulled the image'                     
             }
