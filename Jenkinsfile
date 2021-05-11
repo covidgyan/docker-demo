@@ -1,76 +1,66 @@
 pipeline {
     agent any
-    //{
-   //     docker {
-   //         image 'node:lts-buster-slim'
-   //         args '-p 3000:3000'
-  //      }
- //  }
- //   tools {nodejs "nodejs1"}
+
     tools {dockerTool "docker_jenkins"}
-   // tool name: 'docker_jenkins', type: 'dockerTool'
-   // environment {
-   //     CI = 'true'
-   // }
+  
    environment {
-        //once you sign up for Docker hub, use that user_id here
-      //  registry = "your_docker_user_id/mypythonapp"
-        //- update your credentials ID after creating credentials for connecting to Docker Hub
-        registryCredential = 'dockerhubc'
-     //   dockerImage = ''
+        registryCredential = 'dockerhubc'    
     }
     stages {
-        stage('fetch') {
+        stage('Fetch code from Github') {
             steps {
                 echo "Fetch job"
                 git 'https://github.com/covidgyan/docker-demo.git'
-              //  sh 'npm install'
-            //    sh 'npm start'
             }
         }
-        stage('docker build') {
+        stage('Build docker image') {
             steps {
                 sh 'docker build -t docker_node_demo:latest .'
-               // sh 'docker build -t nginxtest:latest .' 
-                  sh 'docker tag docker_node_demo myimagehub005/docker_node_demo:latest'
+                sh 'docker tag docker_node_demo myimagehub005/docker_node_demo:latest'
+                echo "Build Docker image Succeeded"
             }
         }
         stage('Docker image push') {
             steps {
-           //     script {
-            //        docker.withRegistry( '', registryCredential ) {
-            //        dockerImage.push()
-            //    }
-           //  }
-             //   withCredentials([string(credentialsId: 'dockerhubpwdstring', variable: 'DockerhubPwd')]) {
-             //   sh 'docker login -u myimagehub005 -p $DockerhubPwd'
-            //}
-          //withDockerRegistry(credentialsId: 'dockerhubc', url: 'https://hub.docker.com/repository/docker/myimagehub005/docker_node_demo/') {
-           // sh 'docker push myimagehub005/docker_node_demo:2.0.0'
-          //      }
-            //    sh 'docker push myimagehub005/docker_node_demo:2.0.0'
-          //      withDockerRegistry(credentialsId: 'dockerhubc', url: '') {
-          //      sh 'docker push myimagehub005/docker_node_demo:2.0.0'
-            echo 'puch to dockerhub'
-          //      }
-       //    withDockerRegistry([ credentialsId: "dockerhubc", url: "" ]) {
-        //         sh  'docker push myimagehub005/docker_node_demo:latest'
-        //  sh  'docker push nikhilnidhi/nginxtest:$BUILD_NUMBER' 
-      //  }
+                echo 'push to dockerhub'       
             }
         }
         
-        stage('Docker run') {
+        stage('Run Docker Image') {
             steps {
                 sh 'docker run -d -p 3000:3000 myimagehub005/docker_node_demo:latest'
             }
         }
-         stage('Test') {
+        stage('Deployment in AKS DEV') {
             steps {
-                echo 'test in progress'
-                sh 'node ./test/test.js'
+                echo 'Deployment in progress'   
+                echo 'Deployment Completed'       
             }
-         }
+        }
+         stage('Sonarqube scanning') {
+            steps {
+                echo 'Scanning in progress'   
+                echo 'Scanning Completed'       
+            }
+        }
+         stage('Nexus scanning') {
+            steps {
+                echo 'Scanning in progress'   
+                echo 'Scanning Completed'       
+            }
+        }
+        stage('Whitehat scanning') {
+            steps {
+                echo 'Scanning in progress'   
+                echo 'Scanning Completed'       
+            }
+        }
+        stage('Test in DEV') {
+            steps {
+                echo 'test in progress'   
+                echo 'test Completed'       
+            }
+        }
         stage('Approval for QA deployment') {
             steps {
                 echo "Taking approval from DEV Manager for QA Deployment"
@@ -79,14 +69,72 @@ pipeline {
                  }
             }
         }
-    }
-       
-      //  stage('Deliver') {
-       //     steps {
-       //         sh './jenkins/scripts/deliver.sh'
-       //         input message: 'Finished using the web site? (Click "Proceed" to continue)'
-       //         sh './jenkins/scripts/kill.sh'
-      //      }
-      //  }
-    
+        stage('Pull Docker image') {
+            steps {
+                echo 'Successfully  pulled the image'                     
+            }
+        }
+        stage('Deployment in AKS QA') {
+            steps {
+                echo 'Deployment in progress'   
+                echo 'Deployment Completed'       
+            }
+        }
+        stage('Test in QA') {
+            steps {
+                echo 'test in progress'   
+                echo 'test Completed'       
+            }
+        }
+        stage('Approval for ACC deployment') {
+            steps {
+                echo "Taking approval from QA Manager for ACC Deployment"
+                 timeout(time: 7, unit: 'DAYS') {
+                     input message: 'Do you want to deploy to ACC?', submitter: 'admin'
+                 }
+            }
+        }
+        stage('Pull Docker image') {
+            steps {
+                echo 'Successfully  pulled the image'                     
+            }
+        }
+        stage('Deployment in AKS ACC') {
+            steps {
+                echo 'Deployment in progress'   
+                echo 'Deployment Completed'       
+            }
+        }
+        stage('Test in ACC') {
+            steps {
+                echo 'test in progress'   
+                echo 'test Completed'       
+            }
+        }
+        stage('Approval for PROD deployment') {
+            steps {
+                echo "Taking approval from QA Manager for PROD Deployment"
+                 timeout(time: 7, unit: 'DAYS') {
+                     input message: 'Do you want to deploy to PROD?', submitter: 'admin'
+                 }
+            }
+        }
+        stage('Pull Docker image') {
+            steps {
+                echo 'Successfully  pulled the image'                     
+            }
+        }
+        stage('Deployment in AKS ACC') {
+            steps {
+                echo 'Deployment in progress'   
+                echo 'Deployment Completed'       
+            }
+        }
+        stage('Test in PROD') {
+            steps {
+                echo 'test in progress'   
+                echo 'test Completed'       
+            }
+        }
+    }    
 }
