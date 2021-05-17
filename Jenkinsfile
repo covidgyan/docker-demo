@@ -16,7 +16,7 @@ pipeline {
         stage('Build docker image') {
             steps {
               //  sh 'docker stop mydocker'
-                sh 'docker build -n mydocker -t docker_node_demo:latest .'
+                sh 'docker build -t docker_node_demo:latest .'
                 sh 'docker tag docker_node_demo myimagehub005/docker_node_demo:latest'
                 
                 echo "Build Docker image Succeeded"
